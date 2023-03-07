@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class MainForm extends JFrame {
@@ -20,7 +21,15 @@ public class MainForm extends JFrame {
 
     private Double Calculate(Double upper, Double low, Double step)
     {
-        return upper + low + step;
+        Double result = 0.0;
+        for(int i = 0; i < (upper - low)/step; i ++)
+        {
+            if (low + (i+1) * step < upper)
+                result += 0.5 * step * (Math.sqrt(low + i * step) + Math.sqrt(low + (i+1) * step));
+            else
+                result += 0.5 * step * (Math.sqrt(low + i * step) + Math.sqrt(upper));
+        }
+        return result;
     }
 
     public MainForm(){
