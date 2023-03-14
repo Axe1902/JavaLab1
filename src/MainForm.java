@@ -2,7 +2,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Vector;
 
 public class MainForm extends JFrame {
@@ -17,7 +17,11 @@ public class MainForm extends JFrame {
     private JLabel JLabel_LowerLimit;
     private JLabel JLabel_Step;
     private JTextField TextField_Step;
+    private JButton fillButton;
+    private JButton clearButton;
     private DefaultTableModel model;
+
+    public LinkedList<RecIntegral> list = new LinkedList<>();
 
     private Double Calculate(Double upper, Double low, Double step)
     {
@@ -49,6 +53,10 @@ public class MainForm extends JFrame {
                         Double.parseDouble(TextField_Step.getText()),
                         0
                 });
+                list.add(new RecIntegral(Double.parseDouble(TextField_UpperLimit.getText()),
+                                         Double.parseDouble(TextField_LowerLimit.getText()),
+                                         Double.parseDouble(TextField_Step.getText()),
+                                     0.0));
 
                 TextField_UpperLimit.setText("");
                 TextField_LowerLimit.setText("");
@@ -60,6 +68,7 @@ public class MainForm extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (table1.getSelectedRow() != -1){
+                    list.remove(table1.getSelectedRow());
                     model.removeRow(table1.getSelectedRow());
                 }
             }
@@ -85,9 +94,34 @@ public class MainForm extends JFrame {
         });
 
         setContentPane(WorkPlace);
-        setSize(800, 600);
+        setSize(1000, 600);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        fillButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (RecIntegral memList :
+                        list) {
+                    model.addRow(new Object[]{
+                            memList.upLim,
+                            memList.lowLim,
+                            memList.st,
+                            memList.res
+                    });
+                }
+            }
+        });
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int modelSize = model.getRowCount() - 1;
+                for (int i = modelSize; i >= 0; i--)
+                {
+                    model.removeRow(i);
+                }
+            }
+        });
     }
 
     private void createUIComponents() {
@@ -98,4 +132,18 @@ public class MainForm extends JFrame {
             }
         };
     }
-}
+
+    public class RecIntegral{
+        public Double upLim;
+        public Double lowLim;
+        public Double st;
+        public Double res;
+
+        public RecIntegral(Double upLim, Double lowLim, Double st, Double res) {
+            this.upLim = upLim;
+            this.lowLim = lowLim;
+            this.st = st;
+            this.res = res;
+        }
+    }
+};
