@@ -46,7 +46,37 @@ public class MainForm extends JFrame {
 
         addButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e)  {
+
+                try {
+                    if (Double.parseDouble(TextField_LowerLimit.getText()) > 1000000 ||
+                            Double.parseDouble(TextField_LowerLimit.getText()) < 0.000001)
+                    {
+                        throw new MyException("Выход за пределы диапазона", "Нижний лимит");
+                    }
+
+                    if (Double.parseDouble(TextField_UpperLimit.getText()) > 1000000 ||
+                            Double.parseDouble(TextField_UpperLimit.getText()) < 0.000001)
+                    {
+                        throw new MyException("Выход за пределы диапазона", "Верхний лимит");
+                    }
+
+                    if (Double.parseDouble(TextField_Step.getText()) > 1000000 ||
+                            Double.parseDouble(TextField_Step.getText()) < 0.000001)
+                    {
+                        throw new MyException("Выход за пределы диапазона", "Шаг");
+                    }
+
+                    if (Double.parseDouble(TextField_Step.getText()) != 0)
+                    {
+                        throw new MyException("Шаг не может быть равен нулю", "Шаг");
+                    }
+                } catch (MyException ex)
+                {
+                    ex.ShowMessage(WorkPlace);
+                    return;
+                }
+
                 model.addRow(new Object[]{
                         Double.parseDouble(TextField_UpperLimit.getText()),
                         Double.parseDouble(TextField_LowerLimit.getText()),
@@ -87,6 +117,8 @@ public class MainForm extends JFrame {
 
                     Double result = Calculate(upper, low, step);
                     data.set(3, result);
+
+                    list.get(i).res = result;
                 }
 
                 table1.repaint();
@@ -133,17 +165,4 @@ public class MainForm extends JFrame {
         };
     }
 
-    public class RecIntegral{
-        public Double upLim;
-        public Double lowLim;
-        public Double st;
-        public Double res;
-
-        public RecIntegral(Double upLim, Double lowLim, Double st, Double res) {
-            this.upLim = upLim;
-            this.lowLim = lowLim;
-            this.st = st;
-            this.res = res;
-        }
-    }
 };
