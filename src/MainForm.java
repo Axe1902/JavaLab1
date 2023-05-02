@@ -248,7 +248,7 @@ public class MainForm extends JFrame {
 
                 try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(MyFile.getName()))) {
                     list.clear();
-                    list = ((LinkedList<RecIntegral>)ois.readObject());
+                    list = ((LinkedList<RecIntegral>)ois.readObject());//бла бла бла
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                 }
